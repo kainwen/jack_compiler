@@ -1,0 +1,8 @@
+ebin/*
+*.beam
+*tok.erl
+*~
+.erlang.mk/*
+jack_vm.d
+
+
