@@ -6,7 +6,7 @@ Rules.
 %%
 %% Comments
 //.*\n                   : {token, {comment}}.
-/\*['\n\ra-zA-Z0-9\s*.\t,;\-:/]*\*/ : {token, {comment}}.
+/\*['\n\ra-zA-Z0-9\s*.\t,;\-:/()+="\[\]]*\*/ : {token, {comment}}.
 
 %% keywords
 class                    : {token, {keyword, list_to_atom(TokenChars)}}.

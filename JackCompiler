@@ -1,0 +1,30 @@
+#!/usr/bin/env escript
+%%! -pa ./ebin
+
+-mode(compile).
+
+main([SourceFile]) ->
+    ok = label:start(),
+    case filelib:is_dir(SourceFile) of
+        true ->
+            handle_fiels(SourceFile);
+        false ->
+            handle_single_file(SourceFile)
+    end.
+    
+handle_single_file(SourceFile) ->
+    Dir = filename:dirname(SourceFile),
+    BaseName = filename:basename(filename:basename(SourceFile),
+                                 ".jack"),
+    VmOutFile = filename:join(Dir, string:join([BaseName, ".vm"], "")),
+    JackProg = jack_parse:scan_and_parse(SourceFile),
+    VmCodes = jack_compiler:code_gen({}, JackProg),
+    Text = string:concat(string:join(VmCodes, "\n"), "\n"),
+    file:write_file(VmOutFile, list_to_binary(Text)).
+
+
+handle_fiels(Dirname) ->
+    {ok, AllFiles} = file:list_dir(Dirname),
+    JackFiles = [filename:join(Dirname, Fn)
+               || Fn <- AllFiles, filename:extension(Fn) =:= ".jack"],
+    lists:foreach(fun handle_single_file/1, JackFiles).

@@ -175,6 +175,8 @@ parse_term([{identifier, Var}, {symbol, '['}|RemToks]) ->
     {build_array_ref_term(Var, IdxExp), R};
 parse_term(Toks=[{identifier, _Var}, {symbol, '.'}|_]) ->
     parse_subroutinecall(Toks);
+parse_term(Toks=[{identifier, _Var}, {symbol, '('}|_]) ->
+    parse_subroutinecall(Toks);
 parse_term([{identifier, Var}|RemToks]) ->
     {build_var_term(Var), RemToks};
 parse_term([{symbol, Op}|RemToks]) when Op =:= '-';
